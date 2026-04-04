@@ -84,10 +84,14 @@ button {
     opacity: 0;
     font-size: 36px;
     margin-top: 20px;
-    line-height: 1.4;
+    line-height: 1.5;
     transition: opacity 0.8s ease;
     position: relative;
     z-index: 9999;
+}
+
+#loveResponse div:last-child {
+    margin-top: 10px;
 }
 </style>
 </head>
@@ -109,10 +113,12 @@ button {
         <button id="no">No 😈</button>
     </div>
 
+    <!-- FIXED MESSAGE -->
     <div id="loveResponse">
-        I knew it! ❤️<br>
-        Now show me them titties 😏
+        <div>I knew it! ❤️</div>
+        <div>Now show me them titties 😏</div>
     </div>
+
 </div>
 
 <script>
@@ -200,12 +206,12 @@ window.onload = () => {
                 navigator.vibrate([300,100,300,100,500]);
             }
 
-            // multiple fireworks
+            // fireworks
             for (let i = 0; i < 4; i++) {
                 setTimeout(() => firework(yesBtn), i * 250);
             }
 
-            // show message instantly
+            // SHOW MESSAGE (both lines)
             msg.style.opacity = 1;
 
             // hide buttons
