@@ -19,13 +19,12 @@ body {
     text-align: center;
 }
 
-/* Background image */
+/* Background */
 #backgroundImage {
     position: fixed;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    z-index: 0;
     opacity: 0.25;
 }
 
@@ -40,7 +39,6 @@ body {
     font-size: 42px;
 }
 
-/* Text */
 #message, #question {
     font-size: 24px;
     margin-top: 10px;
@@ -48,7 +46,6 @@ body {
     transition: 1s;
 }
 
-/* Buttons */
 button {
     padding: 12px 25px;
     margin: 10px;
@@ -58,31 +55,27 @@ button {
     cursor: pointer;
 }
 
-#yes {
-    background: #28a745;
-    color: white;
-}
-
-#no {
-    background: #dc3545;
-    color: white;
-    position: absolute;
-}
+#yes { background: #28a745; color: white; }
+#no  { background: #dc3545; color: white; position: absolute; }
 
 /* Hearts */
 .heart {
     position: absolute;
-    bottom: -20px;
-    font-size: 20px;
-    animation: floatUp 6s linear infinite;
+    font-size: 24px;
+    animation: explode 1s ease-out forwards;
 }
 
-@keyframes floatUp {
-    0% { transform: translateY(0); opacity: 1; }
-    100% { transform: translateY(-100vh); opacity: 0; }
+@keyframes explode {
+    0% {
+        transform: translate(0,0) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--x), var(--y)) scale(1.5);
+        opacity: 0;
+    }
 }
 
-/* Final message */
 #loveResponse {
     display: none;
     font-size: 40px;
@@ -93,15 +86,11 @@ button {
 
 <body>
 
-<!-- Background -->
 <img id="backgroundImage" src="PXL_20260328_181057925.jpg">
 
-<!-- Typing -->
 <div id="typing"></div>
 
-<!-- Main content -->
 <div id="mainContent">
-
     <h1>I love you so much hunny ❤️</h1>
 
     <div id="message">You mean everything to me 💕</div>
@@ -113,13 +102,12 @@ button {
     </div>
 
     <div id="loveResponse">I knew it ❤️</div>
-
 </div>
 
 <script>
 window.onload = () => {
 
-    // Typing effect
+    // Typing
     const text = "I love you so much hunny ❤️";
     let i = 0;
 
@@ -140,50 +128,55 @@ window.onload = () => {
                 setTimeout(() => {
                     document.getElementById("question").style.opacity = 1;
                 }, 2000);
-
             }, 800);
         }
     }
 
     type();
 
-    // Heart function
-    function heart() {
-        const h = document.createElement("div");
-        h.className = "heart";
-        h.innerHTML = "❤️";
-        h.style.left = Math.random() * 100 + "vw";
-        document.body.appendChild(h);
-        setTimeout(() => h.remove(), 6000);
+    // 💥 HEART EXPLOSION FUNCTION
+    function explodeHearts() {
+        for (let i = 0; i < 80; i++) {
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            heart.innerHTML = "❤️";
+
+            // Start from center
+            heart.style.left = "50%";
+            heart.style.top = "50%";
+
+            // Random explosion direction
+            const x = (Math.random() - 0.5) * 600 + "px";
+            const y = (Math.random() - 0.5) * 600 + "px";
+
+            heart.style.setProperty("--x", x);
+            heart.style.setProperty("--y", y);
+
+            document.body.appendChild(heart);
+
+            setTimeout(() => heart.remove(), 1000);
+        }
     }
 
-    setInterval(heart, 300);
-
-    // YES button 💥 + vibration 📳
+    // YES button 💥 + vibration
     document.getElementById("yes").onclick = () => {
 
-        // Vibration (Android)
+        // 📳 STRONG vibration
         if (navigator.vibrate) {
-            navigator.vibrate([200, 100, 200, 100, 400]);
+            navigator.vibrate([300,100,300,100,500]);
         }
 
-        // Heart explosion
-        for (let i = 0; i < 120; i++) {
-            setTimeout(heart, i * 10);
-        }
+        explodeHearts();
 
-        // Show message
         document.getElementById("loveResponse").style.display = "block";
 
-        // Hide buttons
         document.getElementById("yes").style.display = "none";
         document.getElementById("no").style.display = "none";
 
-        // Glow effect
         document.body.style.background = "linear-gradient(135deg, #ff1e4d, #ff99aa)";
     };
 
-    // NO button runs away 😂
+    // NO button 😂
     const noBtn = document.getElementById("no");
     noBtn.onmouseover = () => {
         noBtn.style.left = Math.random() * 80 + "vw";
