@@ -56,12 +56,6 @@ button {
 #yes { background: #28a745; }
 #no  { background: #dc3545; position: absolute; }
 
-#loveResponse {
-    display: none;
-    font-size: 40px;
-    margin-top: 20px;
-}
-
 /* Hearts */
 .heart {
     position: absolute;
@@ -76,10 +70,17 @@ button {
     animation: explode 1s ease-out forwards;
 }
 
-/* Explosion animation */
 @keyframes explode {
     0% { transform: translate(0,0) scale(1); opacity: 1; }
     100% { transform: translate(var(--x), var(--y)) scale(1.5); opacity: 0; }
+}
+
+/* Final message */
+#loveResponse {
+    display: none;
+    font-size: 36px;
+    margin-top: 20px;
+    line-height: 1.4;
 }
 </style>
 </head>
@@ -101,7 +102,10 @@ button {
         <button id="no">No 😈</button>
     </div>
 
-    <div id="loveResponse">I knew it ❤️</div>
+    <div id="loveResponse">
+        I knew it! ❤️<br>
+        Now show me them titties 😏
+    </div>
 </div>
 
 <script>
@@ -135,7 +139,7 @@ window.onload = () => {
 
     type();
 
-    // 🎆 Firework explosion with hearts + sparkles
+    // 🎆 Firework explosion
     function firework(button) {
         const rect = button.getBoundingClientRect();
         const startX = rect.left + rect.width / 2;
@@ -143,7 +147,7 @@ window.onload = () => {
 
         for (let i = 0; i < 60; i++) {
 
-            // HEART
+            // ❤️ Hearts
             const heart = document.createElement("div");
             heart.className = "heart";
             heart.innerHTML = "❤️";
@@ -163,7 +167,7 @@ window.onload = () => {
             document.body.appendChild(heart);
             setTimeout(() => heart.remove(), 1200);
 
-            // ✨ SPARKLE
+            // ✨ Sparkles
             const sparkle = document.createElement("div");
             sparkle.className = "sparkle";
             sparkle.innerHTML = "✨";
@@ -188,12 +192,12 @@ window.onload = () => {
 
         yesBtn.addEventListener("click", () => {
 
-            // 📳 vibration
+            // 📳 Vibration
             if (navigator.vibrate) {
                 navigator.vibrate([300,100,300,100,500]);
             }
 
-            // 🎆 MULTIPLE BURSTS
+            // 🎆 Multiple bursts
             for (let i = 0; i < 4; i++) {
                 setTimeout(() => firework(yesBtn), i * 250);
             }
