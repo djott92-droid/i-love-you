@@ -19,7 +19,6 @@ body {
     text-align: center;
 }
 
-/* Background */
 #backgroundImage {
     position: fixed;
     width: 100%;
@@ -28,7 +27,6 @@ body {
     opacity: 0.25;
 }
 
-/* Content */
 #mainContent {
     display: none;
     position: relative;
@@ -55,31 +53,33 @@ button {
     cursor: pointer;
 }
 
-#yes { background: #28a745; color: white; }
-#no  { background: #dc3545; color: white; position: absolute; }
-
-/* Hearts */
-.heart {
-    position: absolute;
-    font-size: 24px;
-    animation: explode 1s ease-out forwards;
-}
-
-@keyframes explode {
-    0% {
-        transform: translate(0,0) scale(1);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(var(--x), var(--y)) scale(1.5);
-        opacity: 0;
-    }
-}
+#yes { background: #28a745; }
+#no  { background: #dc3545; position: absolute; }
 
 #loveResponse {
     display: none;
     font-size: 40px;
     margin-top: 20px;
+}
+
+/* Hearts */
+.heart {
+    position: absolute;
+    font-size: 24px;
+    animation: explode 1.2s ease-out forwards;
+}
+
+/* Sparkles */
+.sparkle {
+    position: absolute;
+    font-size: 14px;
+    animation: explode 1s ease-out forwards;
+}
+
+/* Explosion animation */
+@keyframes explode {
+    0% { transform: translate(0,0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--x), var(--y)) scale(1.5); opacity: 0; }
 }
 </style>
 </head>
@@ -107,7 +107,6 @@ button {
 <script>
 window.onload = () => {
 
-    // Typing
     const text = "I love you so much hunny ❤️";
     let i = 0;
 
@@ -128,60 +127,91 @@ window.onload = () => {
                 setTimeout(() => {
                     document.getElementById("question").style.opacity = 1;
                 }, 2000);
+
+                setupButtons();
             }, 800);
         }
     }
 
     type();
 
-    // 💥 HEART EXPLOSION FUNCTION
-    function explodeHearts() {
-        for (let i = 0; i < 80; i++) {
+    // 🎆 Firework explosion with hearts + sparkles
+    function firework(button) {
+        const rect = button.getBoundingClientRect();
+        const startX = rect.left + rect.width / 2;
+        const startY = rect.top + rect.height / 2;
+
+        for (let i = 0; i < 60; i++) {
+
+            // HEART
             const heart = document.createElement("div");
             heart.className = "heart";
             heart.innerHTML = "❤️";
 
-            // Start from center
-            heart.style.left = "50%";
-            heart.style.top = "50%";
+            heart.style.left = startX + "px";
+            heart.style.top = startY + "px";
 
-            // Random explosion direction
-            const x = (Math.random() - 0.5) * 600 + "px";
-            const y = (Math.random() - 0.5) * 600 + "px";
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = Math.random() * 300 + 100;
+
+            const x = Math.cos(angle) * distance + "px";
+            const y = Math.sin(angle) * distance + "px";
 
             heart.style.setProperty("--x", x);
             heart.style.setProperty("--y", y);
 
             document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 1200);
 
-            setTimeout(() => heart.remove(), 1000);
+            // ✨ SPARKLE
+            const sparkle = document.createElement("div");
+            sparkle.className = "sparkle";
+            sparkle.innerHTML = "✨";
+
+            sparkle.style.left = startX + "px";
+            sparkle.style.top = startY + "px";
+
+            const sx = Math.cos(angle) * (distance * 0.6) + "px";
+            const sy = Math.sin(angle) * (distance * 0.6) + "px";
+
+            sparkle.style.setProperty("--x", sx);
+            sparkle.style.setProperty("--y", sy);
+
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 1000);
         }
     }
 
-    // YES button 💥 + vibration
-    document.getElementById("yes").onclick = () => {
+    function setupButtons() {
+        const yesBtn = document.getElementById("yes");
+        const noBtn = document.getElementById("no");
 
-        // 📳 STRONG vibration
-        if (navigator.vibrate) {
-            navigator.vibrate([300,100,300,100,500]);
-        }
+        yesBtn.addEventListener("click", () => {
 
-        explodeHearts();
+            // 📳 vibration
+            if (navigator.vibrate) {
+                navigator.vibrate([300,100,300,100,500]);
+            }
 
-        document.getElementById("loveResponse").style.display = "block";
+            // 🎆 MULTIPLE BURSTS
+            for (let i = 0; i < 4; i++) {
+                setTimeout(() => firework(yesBtn), i * 250);
+            }
 
-        document.getElementById("yes").style.display = "none";
-        document.getElementById("no").style.display = "none";
+            document.getElementById("loveResponse").style.display = "block";
 
-        document.body.style.background = "linear-gradient(135deg, #ff1e4d, #ff99aa)";
-    };
+            yesBtn.style.display = "none";
+            noBtn.style.display = "none";
 
-    // NO button 😂
-    const noBtn = document.getElementById("no");
-    noBtn.onmouseover = () => {
-        noBtn.style.left = Math.random() * 80 + "vw";
-        noBtn.style.top = Math.random() * 80 + "vh";
-    };
+            document.body.style.background =
+                "linear-gradient(135deg, #ff1e4d, #ff99aa)";
+        });
+
+        noBtn.addEventListener("mouseover", () => {
+            noBtn.style.left = Math.random() * 80 + "vw";
+            noBtn.style.top = Math.random() * 80 + "vh";
+        });
+    }
 
 };
 </script>
