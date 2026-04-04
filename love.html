@@ -19,14 +19,23 @@ body {
     text-align: center;
 }
 
-/* Keep content above images */
+/* Background image */
+#backgroundImage {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+    opacity: 0.25;
+}
+
+/* Content */
 #mainContent {
     display: none;
     position: relative;
     z-index: 2;
 }
 
-/* Typing */
 #typing {
     font-size: 42px;
 }
@@ -73,25 +82,24 @@ button {
     100% { transform: translateY(-100vh); opacity: 0; }
 }
 
-/* Background image (NO animation = no glitch) */
-#backgroundImage {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    z-index: 0;
-    opacity: 0.25;
+/* Final message */
+#loveResponse {
+    display: none;
+    font-size: 40px;
+    margin-top: 20px;
 }
 </style>
 </head>
 
 <body>
 
-<!-- ONE stable background image -->
+<!-- Background -->
 <img id="backgroundImage" src="PXL_20260328_181057925.jpg">
 
+<!-- Typing -->
 <div id="typing"></div>
 
+<!-- Main content -->
 <div id="mainContent">
 
     <h1>I love you so much hunny ❤️</h1>
@@ -104,12 +112,14 @@ button {
         <button id="no">No 😈</button>
     </div>
 
+    <div id="loveResponse">I knew it ❤️</div>
+
 </div>
 
 <script>
 window.onload = () => {
 
-    // Typing
+    // Typing effect
     const text = "I love you so much hunny ❤️";
     let i = 0;
 
@@ -137,7 +147,7 @@ window.onload = () => {
 
     type();
 
-    // Hearts
+    // Heart function
     function heart() {
         const h = document.createElement("div");
         h.className = "heart";
@@ -149,11 +159,31 @@ window.onload = () => {
 
     setInterval(heart, 300);
 
-    // Buttons
+    // YES button 💥 + vibration 📳
     document.getElementById("yes").onclick = () => {
-        for (let i = 0; i < 40; i++) heart();
+
+        // Vibration (Android)
+        if (navigator.vibrate) {
+            navigator.vibrate([200, 100, 200, 100, 400]);
+        }
+
+        // Heart explosion
+        for (let i = 0; i < 120; i++) {
+            setTimeout(heart, i * 10);
+        }
+
+        // Show message
+        document.getElementById("loveResponse").style.display = "block";
+
+        // Hide buttons
+        document.getElementById("yes").style.display = "none";
+        document.getElementById("no").style.display = "none";
+
+        // Glow effect
+        document.body.style.background = "linear-gradient(135deg, #ff1e4d, #ff99aa)";
     };
 
+    // NO button runs away 😂
     const noBtn = document.getElementById("no");
     noBtn.onmouseover = () => {
         noBtn.style.left = Math.random() * 80 + "vw";
